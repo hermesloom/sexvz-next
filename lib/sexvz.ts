@@ -312,21 +312,11 @@ export class SexVZ {
       let dateObj: Date = new Date(NaN);
       if (date) {
         // date is in format D{1,2}.M{1,2}.YYYY H{1,2}:m{1,2}:s{1,2}
-        const deTz = Intl.DateTimeFormat("de-DE", {
-          timeZone: "Europe/Berlin",
-        }).resolvedOptions().timeZone;
         const match = date.match(
           /(\d{1,2})\.(\d{1,2})\.(\d{4}) (\d{1,2}):(\d{1,2}):(\d{1,2})/
         );
         if (match) {
-          const [_, day, month, year, hour, min, sec] = match;
-          // Construct a date string in ISO 8601 format
-          // Pad to two digits for month, day, hour, min, sec
-          const pad = (n: string) => (n.length === 1 ? "0" + n : n);
-          const iso = `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(
-            min
-          )}:${pad(sec)}`;
-          // See previous logic for time zone handling
+          const [day, month, year, hour, min, sec] = [...match].slice(1);
           const localDate = new Date(
             Number(year),
             Number(month) - 1,
@@ -475,7 +465,7 @@ export class SexVZ {
           /, am (\d{1,2})\.(\d{1,2})\.(\d{4}) (\d{1,2}):(\d{1,2}):(\d{1,2})/
         );
         if (dateMatch) {
-          const [_, day, month, year, hour, min, sec] = dateMatch;
+          const [day, month, year, hour, min, sec] = [...dateMatch].slice(1);
           const localDate = new Date(
             Number(year),
             Number(month) - 1,

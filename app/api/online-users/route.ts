@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   try {
     const users = await sexvz.getOnlineUsers();
     return NextResponse.json(users);
-  } catch (_) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch online users" },
       { status: 500 }

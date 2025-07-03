@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import Image from "next/image";
 
 interface OnlineUser {
   id: string;
@@ -239,10 +240,12 @@ function ChatMain({ sessionId }: { sessionId: string }) {
                 key={u.id}
                 className="flex items-center gap-2 p-2 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer"
               >
-                <img
+                <Image
                   src={u.imageUrl}
                   alt={u.username}
                   className="w-8 h-8 rounded-full object-cover"
+                  width={32}
+                  height={32}
                 />
                 <div>
                   <div className="font-medium text-sm">{u.username}</div>
@@ -280,10 +283,12 @@ function ChatMain({ sessionId }: { sessionId: string }) {
                   }`}
                   onClick={() => setSelectedChat(t)}
                 >
-                  <img
+                  <Image
                     src={t.user.imageUrl}
                     alt={t.user.name}
                     className="w-8 h-8 rounded-full object-cover"
+                    width={32}
+                    height={32}
                   />
                   <div className="flex-1">
                     <div className="font-medium text-sm flex items-center gap-1">
@@ -433,10 +438,12 @@ function ThreadView({
                 }`}
               >
                 <div className="mb-1 flex items-center gap-2">
-                  <img
+                  <Image
                     src={msg.senderImageUrl}
                     alt={msg.senderName}
                     className="w-5 h-5 rounded-full object-cover"
+                    width={20}
+                    height={20}
                   />
                   <span className="font-medium">
                     {isMe ? "Me" : msg.senderName}
@@ -449,12 +456,14 @@ function ThreadView({
                 {msg.images && msg.images.length > 0 && (
                   <div className="flex gap-2 mt-2">
                     {msg.images.map((img, j) => (
-                      <img
+                      <Image
                         key={j}
                         src={img}
                         alt="attachment"
                         className="w-24 h-24 object-cover rounded cursor-pointer hover:brightness-90 transition"
-                        loading="lazy"
+                        width={96}
+                        height={96}
+                        unoptimized
                         onClick={() => setLightboxImage(img)}
                       />
                     ))}
@@ -493,10 +502,12 @@ function ThreadView({
         <DialogContent className="flex items-center justify-center p-0 bg-transparent shadow-none max-w-[98vw] max-h-[98vh] w-auto h-auto">
           <DialogTitle className="sr-only">Image preview</DialogTitle>
           {lightboxImage && (
-            <img
+            <Image
               src={lightboxImage}
               alt="Enlarged"
               className="w-full h-full max-w-[98vw] max-h-[98vh] object-contain rounded-lg"
+              width={384}
+              height={256}
             />
           )}
         </DialogContent>
@@ -542,10 +553,12 @@ function ProfileView({ profile }: { profile: Profile }) {
   return (
     <div className="flex flex-col gap-4 p-0">
       <div className="w-full h-64 flex items-center justify-center bg-white">
-        <img
+        <Image
           src={profile.imageUrl}
           alt={profile.username}
           className="max-h-64 w-auto object-contain"
+          width={384}
+          height={256}
         />
       </div>
       <div className="flex flex-col gap-4 p-4">

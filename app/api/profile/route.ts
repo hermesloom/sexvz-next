@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   try {
     const profile = await sexvz.getProfile(id);
     return NextResponse.json(profile);
-  } catch (_) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch profile" },
       { status: 500 }

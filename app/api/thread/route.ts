@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   try {
     const messages = await sexvz.getThread(msgId, dialogId);
     return NextResponse.json(messages);
-  } catch (_) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch thread" },
       { status: 500 }
