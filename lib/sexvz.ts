@@ -166,7 +166,7 @@ export class SexVZ {
       couple = 0;
     const writesRegex =
       /Schreibt: ([\d,.]+) % an (männlich|weiblich|pärchen)/gi;
-    let writesMatchArr: any;
+    let writesMatchArr: RegExpExecArray | null;
     while ((writesMatchArr = writesRegex.exec(aboutHtml)) !== null) {
       const value = parseFloat(writesMatchArr[1].replace(",", "."));
       const typeStr = writesMatchArr[2].toLowerCase();
@@ -387,7 +387,7 @@ export class SexVZ {
     let allItems: MessageBoxItem[] = [];
     let page = 0;
     let totalPages: number | undefined = undefined;
-    let keepGoing = true;
+    const keepGoing = true;
     while (keepGoing) {
       const {
         items,
@@ -476,7 +476,6 @@ export class SexVZ {
         );
         if (dateMatch) {
           const [_, day, month, year, hour, min, sec] = dateMatch;
-          const pad = (n: string) => (n.length === 1 ? "0" + n : n);
           const localDate = new Date(
             Number(year),
             Number(month) - 1,

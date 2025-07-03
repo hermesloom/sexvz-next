@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       unread: t.unread,
     }));
     return NextResponse.json(mapped);
-  } catch (e) {
+  } catch (_) {
     return NextResponse.json(
       { error: "Failed to fetch threads" },
       { status: 500 }

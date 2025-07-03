@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     if (!sexvz.sessionId)
       return NextResponse.json({ error: "Login failed" }, { status: 401 });
     return NextResponse.json({ sessionId: sexvz.sessionId });
-  } catch (e) {
+  } catch (_) {
     return NextResponse.json({ error: "Login failed" }, { status: 401 });
   }
 }
