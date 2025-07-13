@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ThreadMessage, ThreadSummary } from "./types";
@@ -19,13 +19,53 @@ export function ThreadView({
   onMessageSent,
 }: ThreadViewProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  useEffect(() => {
-    if (bottomRef.current)
-      bottomRef.current.scrollIntoView({ behavior: "auto" });
+  // Scroll state
+  const userScrolledUp = useRef(false);
+  const storedScrollTop = useRef<number | null>(null);
+  const prevThreadId = useRef<string | null>(null);
+
+  // Detect user scroll
+  function handleScroll() {
+    const el = containerRef.current;
+    if (!el) return;
+    const atBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 10;
+    userScrolledUp.current = !atBottom;
+    if (userScrolledUp.current) {
+      storedScrollTop.current = el.scrollTop;
+    } else {
+      storedScrollTop.current = null;
+    }
+  }
+
+  // Restore scroll position or scroll to bottom on message update
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (userScrolledUp.current && storedScrollTop.current !== null) {
+      el.scrollTop = storedScrollTop.current;
+    } else {
+      if (bottomRef.current)
+        bottomRef.current.scrollIntoView({ behavior: "auto" });
+    }
   }, [messages]);
+
+  // On thread switch, always scroll to bottom and clear stored scroll
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (selectedThread && prevThreadId.current !== selectedThread.dialogId) {
+      if (bottomRef.current)
+        bottomRef.current.scrollIntoView({ behavior: "auto" });
+      userScrolledUp.current = false;
+      storedScrollTop.current = null;
+      prevThreadId.current = selectedThread.dialogId;
+    }
+  }, [selectedThread]);
+
   if (loading)
     return (
       <div className="flex-1 flex items-center justify-center h-full">
@@ -64,8 +104,12 @@ export function ThreadView({
     onMessageSent();
   }
   return (
-    <div className="relative flex-1 h-full">
-      <div className="flex flex-col gap-2 p-4 pb-24 h-full overflow-y-auto">
+    <div className="flex flex-col flex-1 h-full">
+      <div
+        ref={containerRef}
+        className="flex-1 flex flex-col gap-2 p-4 overflow-y-auto"
+        onScroll={handleScroll}
+      >
         {messages.map((msg, i) => {
           const isMe = msg.senderId !== selectedThread.user.id;
           return (
@@ -120,7 +164,7 @@ export function ThreadView({
       </div>
       <form
         onSubmit={handleSend}
-        className="absolute bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800 flex items-center gap-2 p-4 z-10 w-full"
+        className="flex items-center gap-2 p-4 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
       >
         <input
           type="text"
