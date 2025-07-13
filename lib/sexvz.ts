@@ -484,12 +484,19 @@ export class SexVZ {
         'div[style*="word-wrap: break-word"]'
       );
       if (msgDiv) {
-        // Extract text content (excluding images)
+        // Extract text content (including <br> as newlines, excluding images)
         message = Array.from(msgDiv.childNodes)
-          .filter((n) => n.nodeType === 3)
-          .map((n) => n.textContent?.trim() || "")
-          .join(" ")
-          .trim();
+          .map((n) => {
+            if (n.nodeType === 3) return n.textContent || "";
+            if (
+              n.nodeType === 1 &&
+              (n as HTMLElement).tagName.toLowerCase() === "br"
+            )
+              return "\n";
+            return "";
+          })
+          .join("")
+          .replace(/\n{3,}/g, "\n\n"); // collapse 3+ newlines to 2
         // Extract all <img> tags (excluding profile image)
         images = Array.from(msgDiv.querySelectorAll("img")).map((img) => {
           const src = img.getAttribute("src") || "";

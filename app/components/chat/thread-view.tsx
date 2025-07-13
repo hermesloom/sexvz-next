@@ -103,6 +103,19 @@ export function ThreadView({
     setSending(false);
     onMessageSent();
   }
+
+  function renderMessageWithLineBreaks(message: string) {
+    return message.split(/\n/).map((part, i, arr) =>
+      i < arr.length - 1 ? (
+        <span key={i}>
+          {part}
+          <br />
+        </span>
+      ) : (
+        <span key={i}>{part}</span>
+      )
+    );
+  }
   return (
     <div className="flex flex-col flex-1 h-full">
       <div
@@ -139,7 +152,7 @@ export function ThreadView({
                     {new Date(msg.date).toLocaleTimeString()}
                   </span>
                 </div>
-                <div>{msg.message}</div>
+                <div>{renderMessageWithLineBreaks(msg.message)}</div>
                 {msg.images && msg.images.length > 0 && (
                   <div className="flex gap-2 mt-2">
                     {msg.images.map((img, j) => (
