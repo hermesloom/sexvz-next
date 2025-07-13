@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { ViewType, ViewTypeValue } from "./types";
+import Image from "next/image";
 
 interface ChatHeaderProps {
   view: ViewTypeValue;
@@ -16,6 +17,14 @@ interface ChatHeaderProps {
 export function ChatHeader({ view, setView, onLogout }: ChatHeaderProps) {
   return (
     <div className="flex items-center gap-4 p-2 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 w-full">
+      <Image
+        src="/logo.svg"
+        alt="Logo"
+        width={32}
+        height={32}
+        className="mr-2"
+        priority
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
