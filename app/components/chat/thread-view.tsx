@@ -138,16 +138,28 @@ export function ThreadView({
                 }`}
               >
                 <div className="mb-1 flex items-center gap-2">
-                  <Image
-                    src={msg.senderImageUrl}
-                    alt={msg.senderName}
-                    className="w-5 h-5 rounded-full object-cover"
-                    width={20}
-                    height={20}
-                  />
-                  <span className="font-medium">
+                  <a
+                    href={msg.senderProfileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focus:outline-none"
+                  >
+                    <Image
+                      src={msg.senderImageUrl}
+                      alt={msg.senderName}
+                      className="w-5 h-5 rounded-full object-cover hover:brightness-90 transition"
+                      width={20}
+                      height={20}
+                    />
+                  </a>
+                  <a
+                    href={msg.senderProfileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium hover:underline focus:outline-none"
+                  >
                     {isMe ? "Me" : msg.senderName}
-                  </span>
+                  </a>
                   <span className="text-xs text-zinc-400">
                     {new Date(msg.date).toLocaleTimeString()}
                   </span>
